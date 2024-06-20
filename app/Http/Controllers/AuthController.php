@@ -15,19 +15,12 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'first_name'    =>  ['required'],
-            'last_name'     =>  ['required'],
-            'email'         =>  ['required', 'unique:users,email'],
-            'password'      =>  ['required', 'min:6', 'confirmed'],
+        $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|confirmed'
         ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'    =>  'error',
-                'message'   =>  $validator->errors(),
-            ], JsonResponse::HTTP_BAD_REQUEST);
-        }
 
         $data = $request->all();
         if (!empty($data['password'])) {
@@ -72,7 +65,8 @@ class AuthController extends Controller
             return response()->json([
                 'status' => 'success',
                 'access_token' => $token,
-                'user' => $user,
+                'user'  => $user,
+                'message'   =>  'User logged in successfully',
             ]);
         }
 

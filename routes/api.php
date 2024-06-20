@@ -14,9 +14,9 @@ Route::post('reset-password', [AuthController::class, 'resetPassword']);
 
 
 
-Route::group(['middleware' => ['auth:api', 'throttle:only_three_time']], function () {
+Route::group(['middleware' => ['auth:api']], function () {
     Route::get('logout', [AuthController::class, 'logout']);
     Route::get('send-mail', [SiteController::class, 'sendMail']);
     Route::get('profile', [SiteController::class, 'profile']);
-    Route::post('update-profile/{id}', [SiteController::class, 'updateProfile']);
+    Route::post('update-profile', [SiteController::class, 'updateProfile']);
 });

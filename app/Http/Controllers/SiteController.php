@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Mail\SendMail;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -36,25 +37,29 @@ class SiteController extends Controller
         ], JsonResponse::HTTP_OK);
     }
 
-    public function updateProfile(Request $request, $id)
+    public function updateProfile(Request $request)
     {
+        $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'current_password' => ['sometimes', 'current_password'],
             'new_password' => ['sometimes', 'min:6', 'confirmed'],
             'first_name' => ['sometimes', 'string'],
             'last_name' => ['sometimes', 'string'],
-            'email' => ['sometimes', 'email', 'unique:users,email,' . $id],
+            'email' => [
+                'sometimes',
+                'email',
+                Rule::unique('users', 'email')->ignore($user->id),
+            ],
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'status'    =>  'error',
-                'message'   =>  $validator->errors(),
+                'errors'   =>  $validator->errors(),
             ], JsonResponse::HTTP_BAD_REQUEST);
         }
 
         $data = $request->only(['first_name', 'last_name', 'email']);
-        $user = User::findorfail($id);
         if ($request->filled('new_password')) {
             $data['password'] = bcrypt($request->new_password);
         }

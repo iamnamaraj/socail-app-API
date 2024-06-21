@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,4 +20,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('send-mail', [SiteController::class, 'sendMail']);
     Route::get('profile', [SiteController::class, 'profile']);
     Route::post('update-profile', [SiteController::class, 'updateProfile']);
+    Route::post('update-post/{id}', [PostController::class, 'updatePost']);
+    Route::get('posts/public', [PostController::class, 'publicPosts']);
+    Route::apiResource('posts', (PostController::class));
 });

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LikeCommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Http\Request;
@@ -23,4 +24,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('update-post/{id}', [PostController::class, 'updatePost']);
     Route::get('posts/public', [PostController::class, 'publicPosts']);
     Route::apiResource('posts', (PostController::class));
+    Route::post('post/comment', [LikeCommentController::class, 'comment']);
+    Route::post('post/like-unlike', [LikeCommentController::class, 'likeUnlike']);
 });

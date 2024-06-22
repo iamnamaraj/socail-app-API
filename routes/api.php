@@ -25,5 +25,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('posts/public', [PostController::class, 'publicPosts']);
     Route::apiResource('posts', (PostController::class));
     Route::post('post/comment', [LikeCommentController::class, 'comment']);
-    Route::post('post/like-unlike', [LikeCommentController::class, 'likeUnlike']);
+    Route::get('like-unlike/{id}', [LikeCommentController::class, 'likeUnlike']);
 });

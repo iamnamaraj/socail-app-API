@@ -167,7 +167,6 @@ class PostController extends Controller
         $userId = Auth::user()->id;
         $posts = Post::with('user:id,first_name,last_name', 'likes.user:id,first_name,last_name', 'comments.user:id,first_name,last_name')
             ->withCount(['likes', 'comments'])
-            ->where('user_id', $userId)
             ->where('visibility', 'public')
             ->latest()
             ->paginate(10);
